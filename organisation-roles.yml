@@ -1,0 +1,122 @@
+---
+Variables:
+  MainAccountId: 1234567890
+  MainProfile: odania
+  Region: eu-central-1
+
+Accounts:
+  develop:
+    AccountId: 123-develop
+    RoleName: OrganizationAccountAccessRole
+  test:
+    AccountId: 123-test
+    RoleName: OrganizationAccountAccessRole
+  live:
+    AccountId: 123-live
+    RoleName: OrganizationAccountAccessRole
+  infrastructure:
+    AccountId: 123-infratructure
+    RoleName: OrganizationAccountAccessRole
+
+Groups:
+  developer:
+    ManagedPolicies:
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
+  readonly:
+    ManagedPolicies:
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
+  admin:
+    ManagedPolicies:
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
+  org-admin:
+    ManagedPolicies:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+
+Policies:
+  admin:
+    Statements:
+      - Effect: Allow
+        Resources:
+          - '*'
+        Actions:
+          - '*'
+  billing-readonly:
+    Statements:
+      - Effect: Allow
+        Resources:
+          - '*'
+        Actions:
+          - aws-portal:View*
+          - budgets:View*
+  developer:
+    Statements:
+      - Effect: Allow
+        Resources:
+          - '*'
+        Actions:
+          - acm:*
+          - amplify:*
+          - apigateway:*
+          - application-autoscaling:DeleteScalingPolicy
+          - application-autoscaling:DeregisterScalableTarget
+          - application-autoscaling:DescribeScalableTargets
+          - application-autoscaling:DescribeScalingActivities
+          - application-autoscaling:DescribeScalingPolicies
+          - application-autoscaling:PutScalingPolicy
+          - application-autoscaling:RegisterScalableTarget
+          - appsync:*
+          - autoscaling:*
+          - cognito-idp:*
+          - cognito-identity:*
+          - cloudformation:*
+          - cloudfront:*
+          - cloudwatch:*
+          - codebuild:*
+          - codecommit:*
+          - codepipeline:*
+          - dynamodb:*
+          - ec2:*
+          - ecr:*
+          - elasticfilesystem:*
+          - elasticloadbalancing:*
+          - events:*
+          - kms:*
+          - lambda:*
+          - logs:*
+          - s3:*
+          - ses:*
+          - sns:*
+          - iam:*
+          - cloudtrail:*
+          - trustedadvisor:*
+          - route53:*
+          - route53domains:*
+          - ses:*
+          - ssm:*
+          - firehose:*
+          - rds:*
+          - waf:*
+          - support:*
+          - health:*
+
+Roles:
+  admin:
+    Policies:
+      - admin
+      - developer
+      - billing-readonly
+  developer:
+    Policies:
+      - developer
+      - billing-readonly
+  readonly:
+    Policies:
+      - billing-readonly
+
+Users:
+  mike:
+    Groups:
+      - admin
+      - developer
+      - org-admin
+      - readonly
